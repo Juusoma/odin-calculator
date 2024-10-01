@@ -1,0 +1,53 @@
+body{
+    margin: 0;
+}
+
+.page-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    background-color: rgb(44, 107, 122);
+}
+
+.calculator-container{
+    background-color: rgb(26, 26, 26);
+    padding: 32px;
+    border-radius: 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.calculator-screen-container{
+    width: 100%;
+    height: 96px;
+}
+
+.calculator-screen{
+    background-color: grey;
+    width: 100%;
+    height: 100%;
+}
+
+.calculator-keypad{
+    display: flex;
+    gap: 8px;
+}
+
+.keypad-column{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.calculator-button {
+    width: 64px;
+    height: 64px;
+}
+
+.button-add{
+    flex: 1;
+}
