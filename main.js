@@ -29,11 +29,6 @@ function operate(operator, num1, num2){
     }
 }
 
-console.log(`add 3 and 5: ${operate("+", 3, 5)}`);
-console.log(`subtract 3 and 5: ${operate("-", 3, 5)}`);
-console.log(`multiply 3 and 5: ${operate("*", 3, 5)}`);
-console.log(`divide 3 and 5: ${operate("/", 3, 5)}`);
-
 let memSlot = 0;
 let operator = "";
 let displayValue = "";
@@ -44,7 +39,6 @@ const calculatorDisplayElement = document.querySelector(".calculator-display");
 
 function setDisplayValue(str){
     str = str.toString();
-    console.log(str.length);
     if(str.length > maxDisplayCharacters){
         str = str.slice(0, maxDisplayCharacters);
     }
@@ -131,8 +125,10 @@ function completeExpression(){
 
 const calculatorKeypadElement = document.querySelector(".calculator-keypad");
 calculatorKeypadElement.addEventListener("click", handleKeypadClick);
+const clickAudio = new Audio("./public/click_01.wav");
 
 function handleKeypadClick(e){
+    clickAudio.play();
     switch(e.target.id){
         case "button-clear":
             clearDisplay();
