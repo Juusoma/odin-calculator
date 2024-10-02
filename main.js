@@ -40,7 +40,7 @@ let operator = "";
 let displayValue = "";
 const maxDisplayCharacters = 7;
 
-const calculatorDisplayElement = document.querySelector(".calculator-screen");
+const calculatorDisplayElement = document.querySelector(".calculator-display");
 
 function setDisplayText(str){
     calculatorDisplayElement.textContent = str;
