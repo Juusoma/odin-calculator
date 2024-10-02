@@ -84,6 +84,14 @@ function addCharacterToDisplay(char){
     setDisplayValue(displayValue);
 }
 
+function swapSign(){
+    let displayNum = parseFloat(displayValue);
+    if(isNaN(displayNum)) return;
+
+    displayNum *= -1;
+    setDisplayValue(displayNum);
+}
+
 function setOperator(op){
     if(["+", "-", "/", "*"].includes(op))
         operator = op;
@@ -176,6 +184,9 @@ function handleKeypadClick(e){
             break;
         case "button-subtract":
             beginExpression("-")
+            break;
+        case "button-sign":
+            swapSign();
             break;
         case "button-equals":
             completeExpression();
