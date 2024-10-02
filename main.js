@@ -33,7 +33,8 @@ let memSlot = 0;
 let operator = "";
 let displayValue = "";
 let shouldClearDisplay = false;
-const maxDisplayCharacters = 7;
+let displayDirty = false;
+const maxDisplayCharacters = 8;
 
 const calculatorDisplayElement = document.querySelector(".calculator-display");
 
@@ -45,6 +46,7 @@ function setDisplayValue(str){
 
     displayValue = str;
     calculatorDisplayElement.textContent = str;
+    displayDirty = true;
 }
 
 function reduceDisplayValue(){
@@ -93,8 +95,8 @@ function setOperator(op){
         console.error(`Couldn't set operator: ${op}`)
 }
 
-function storeCurrentValueInMemory(){
-    let num = parseFloat(displayValue);
+function storeValueInMemory(value){
+    let num = parseFloat(value);
     shouldClearDisplay = true;
 
     if(!isNaN(num)){
@@ -102,13 +104,17 @@ function storeCurrentValueInMemory(){
     }
     else{
         memSlot = 0;
-        console.error(`Couldn't parse float: ${displayValue}`)
+        console.error(`Couldn't parse float: ${value}`)
     }
 }
 
 function beginExpression(op){
     setOperator(op);
-    storeCurrentValueInMemory();
+    
+    //overwrite value in memory only if the user has input a new value
+    //calculations can give more precise values than the user can input
+    if(displayDirty)
+        storeValueInMemory(displayValue);
 }
 
 function completeExpression(){
@@ -119,7 +125,8 @@ function completeExpression(){
 
     const result = operate(operator, num1, num2);
     setDisplayValue(result);
-    storeCurrentValueInMemory();
+    storeValueInMemory(result);
+    displayDirty = false;
     operator = "";
 }
 
@@ -128,7 +135,9 @@ calculatorKeypadElement.addEventListener("click", handleKeypadClick);
 const clickAudio = new Audio("./public/click_01.wav");
 
 function handleKeypadClick(e){
-    clickAudio.play();
+
+    let clickedButton = true;
+
     switch(e.target.id){
         case "button-clear":
             clearDisplay();
@@ -188,5 +197,10 @@ function handleKeypadClick(e){
         case "button-equals":
             completeExpression();
             break;
+        default:
+            clickedButton = false;
+            break;
     }
+    
+    if(clickedButton) clickAudio.play();
 }

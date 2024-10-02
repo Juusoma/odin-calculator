@@ -111,6 +111,7 @@ body{
 
 .calculator-button:active{
     scale: .94;
+    opacity: .8;
 }
 
 #button-add{
