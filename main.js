@@ -126,6 +126,7 @@ function completeExpression(){
     const result = operate(operator, num1, num2);
     setDisplayValue(result);
     storeCurrentValueInMemory();
+    operator = "";
 }
 
 const calculatorKeypadElement = document.querySelector(".calculator-keypad");
