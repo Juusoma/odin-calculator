@@ -1,6 +1,6 @@
 @font-face{
-    font-family: 'Jura';
-    src: url('./public/Jura-VariableFont_wght.ttf');
+    font-family: 'ShareTechMono';
+    src: url('./public/ShareTechMono-Regular.ttf');
     font-weight: 400;
     font-style: normal;
 }
@@ -69,6 +69,7 @@ body{
     height: 96px;
 
     background-color: rgb(89, 88, 85);
+    background: linear-gradient(45deg, rgb(57, 56, 54), rgb(89, 88, 85));
     border: 6px solid rgb(48, 48, 48);
     border-radius: 8px;
 }
@@ -82,7 +83,7 @@ body{
 
     color: rgb(255, 255, 255);
     font-size: 56px;
-    font-family: 'Jura';
+    font-family: 'ShareTechMono';
 }
 
 .calculator-keypad{
@@ -100,11 +101,16 @@ body{
     width: 64px;
     height: 64px;
 
+    font-size: 14px;
     background: linear-gradient(0deg, rgb(200, 200, 200), rgb(150, 150, 150));
     border-radius: 4px;
     border-width: 4px;
     filter: sepia(1) hue-rotate(180deg) saturate(.2);
     transition: scale .2s;
+}
+
+.calculator-button:active{
+    scale: .94;
 }
 
 #button-add{
@@ -121,8 +127,4 @@ body{
 
 #button-equals{
     filter: sepia(1) hue-rotate(90deg) saturate(4);
-}
-
-.calculator-button:active{
-    scale: .94;
 }
