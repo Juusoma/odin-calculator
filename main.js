@@ -25,7 +25,7 @@ function operate(operator, num1, num2){
         case "/":
             return divide(num1, num2);
         default:
-            debug.error(`Invalid operator: ${operator}`);
+            console.error(`Invalid operator: ${operator}`);
     }
 }
 
@@ -34,30 +34,90 @@ console.log(`subtract 3 and 5: ${operate("-", 3, 5)}`);
 console.log(`multiply 3 and 5: ${operate("*", 3, 5)}`);
 console.log(`divide 3 and 5: ${operate("/", 3, 5)}`);
 
-let memSlot1 = 0;
-let memSlot2 = 0;
+let memSlot = 0;
 let operator = "";
 let displayValue = "";
+let shouldClearDisplay = false;
 const maxDisplayCharacters = 7;
 
 const calculatorDisplayElement = document.querySelector(".calculator-display");
 
-function setDisplayText(str){
+function setDisplayValue(str){
+    str = str.toString();
+    console.log(str.length);
+    if(str.length > maxDisplayCharacters){
+        str = str.slice(0, maxDisplayCharacters);
+    }
+
+    displayValue = str;
     calculatorDisplayElement.textContent = str;
 }
 
-function clearDisplay(){
-    displayValue = "";
-    setDisplayText("");
+function reduceDisplayValue(){
+    if(displayValue == "") return;
+    setDisplayValue(displayValue.substr(0, displayValue.length-1));
 }
 
-function addCharacterToDisplay(num){
+function clearDisplay(){
+    setDisplayValue("");
+}
+
+function clearMemory(){
+    memSlot = 0;
+    operator = "";
+}
+
+function addCharacterToDisplay(char){
+    if(shouldClearDisplay){
+        setDisplayValue("");
+        shouldClearDisplay = false;
+    }
+    else if(displayValue.includes(".") && char == "."){
+        return;
+    }
+
     if(displayValue.length >= maxDisplayCharacters){
         return;
     }
 
-    displayValue += num;
-    setDisplayText(displayValue);
+    displayValue += char;
+    setDisplayValue(displayValue);
+}
+
+function setOperator(op){
+    if(["+", "-", "/", "*"].includes(op))
+        operator = op;
+    else
+        console.error(`Couldn't set operator: ${op}`)
+}
+
+function storeCurrentValueInMemory(){
+    let num = parseFloat(displayValue);
+    shouldClearDisplay = true;
+
+    if(!isNaN(num)){
+        memSlot = num;
+    }
+    else{
+        memSlot = 0;
+        console.error(`Couldn't parse float: ${displayValue}`)
+    }
+}
+
+function beginExpression(op){
+    setOperator(op);
+    storeCurrentValueInMemory();
+}
+
+function completeExpression(){
+    if(operator === "") return;
+    const num1 = memSlot;
+    const num2 = parseFloat(displayValue);
+    if(isNaN(num1) || isNaN(num2)) return;
+
+    const result = operate(operator, num1, num2);
+    setDisplayValue(result);
+    storeCurrentValueInMemory();
 }
 
 const calculatorKeypadElement = document.querySelector(".calculator-keypad");
@@ -67,6 +127,10 @@ function handleKeypadClick(e){
     switch(e.target.id){
         case "button-clear":
             clearDisplay();
+            clearMemory();
+            break;
+        case "button-backspace":
+            reduceDisplayValue();
             break;
         case "button-nine":
             addCharacterToDisplay(9);
@@ -100,6 +164,21 @@ function handleKeypadClick(e){
             break;
         case "button-decimal":
             addCharacterToDisplay(".");
+            break;
+        case "button-divide":
+            beginExpression("/")
+            break;
+        case "button-multiply":
+            beginExpression("*")
+            break;
+        case "button-add":
+            beginExpression("+")
+            break;
+        case "button-subtract":
+            beginExpression("-")
+            break;
+        case "button-equals":
+            completeExpression();
             break;
     }
 }
