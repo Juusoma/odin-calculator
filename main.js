@@ -34,18 +34,23 @@ let operator = "";
 let displayValue = "";
 let shouldClearDisplay = false;
 let displayDirty = false;
-const maxDisplayCharacters = 8;
+const maxDisplayCharacters = 7;
 
 const calculatorDisplayElement = document.querySelector(".calculator-display");
 
-function setDisplayValue(str){
-    str = str.toString();
-    if(str.length > maxDisplayCharacters){
-        str = str.slice(0, maxDisplayCharacters);
+function setDisplayValue(value){
+    let clampedString = value.toString();
+    if(clampedString.length > maxDisplayCharacters){
+        if(clampedString.startsWith("-")){
+            clampedString = clampedString.slice(0, maxDisplayCharacters+1);
+        }
+        else{
+            clampedString = clampedString.slice(0, maxDisplayCharacters);
+        }
     }
 
-    displayValue = str;
-    calculatorDisplayElement.textContent = str;
+    displayValue = clampedString;
+    calculatorDisplayElement.textContent = clampedString;
     displayDirty = true;
 }
 
@@ -72,12 +77,7 @@ function addCharacterToDisplay(char){
         return;
     }
 
-    if(displayValue.length >= maxDisplayCharacters){
-        return;
-    }
-
-    displayValue += char;
-    setDisplayValue(displayValue);
+    setDisplayValue(displayValue + char);
 }
 
 function swapSign(){
@@ -98,6 +98,7 @@ function setOperator(op){
 function storeValueInMemory(value){
     let num = parseFloat(value);
     shouldClearDisplay = true;
+    displayDirty = false;
 
     if(!isNaN(num)){
         memSlot = num;
@@ -126,7 +127,6 @@ function completeExpression(){
     const result = operate(operator, num1, num2);
     setDisplayValue(result);
     storeValueInMemory(result);
-    displayDirty = false;
     operator = "";
 }
 
